@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Fabric 服务器管理器</title>
+    <title>Minecraft Fabric Server Manager</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide 图标库 -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
@@ -45,15 +45,15 @@
 
     <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6">
 
-        <!-- 头部 Header -->
+        <!-- Header -->
         <header class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
             <div class="flex items-center gap-3">
                 <div class="p-2.5 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20">
                     <i data-lucide="server" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-white tracking-tight">Fabric 服务器控制台</h1>
-                    <p class="text-xs text-slate-400">本地服务端轻量化构建与管理</p>
+                    <h1 class="text-xl font-bold text-white tracking-tight">Fabric Server Console</h1>
+                    <p class="text-xs text-slate-400">Lightweight local server deployment and management</p>
                 </div>
             </div>
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -61,123 +61,123 @@
             </span>
         </header>
 
-        <!-- 部署 Fabric 服务器卡片 -->
+        <!-- Deploy Fabric Server Card -->
         <section class="glass-card rounded-2xl p-6 mb-6 shadow-xl transition-all duration-300">
             <h2 class="text-base font-semibold text-white mb-4 flex items-center gap-2">
-                <i data-lucide="download-cloud" class="w-5 h-5 text-blue-400"></i> 部署 Fabric 服务端
+                <i data-lucide="download-cloud" class="w-5 h-5 text-blue-400"></i> Deploy Fabric Server
             </h2>
 
             <div class="flex flex-col sm:flex-row gap-3 items-end">
                 <div class="w-full sm:flex-1">
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">选择 Minecraft 版本</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Select Minecraft Version</label>
                     <div class="relative">
                         <select id="mc-version-select" class="w-full bg-slate-800/80 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all appearance-none cursor-pointer">
-                            <option value="">正在加载官方版本列表...</option>
+                            <option value="">Loading official version list...</option>
                         </select>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3.5 top-3 pointer-events-none"></i>
                     </div>
                 </div>
 
                 <button onclick="installServer()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white text-sm font-medium py-2.5 px-5 rounded-xl transition-all duration-200 shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 shrink-0">
-                    <i data-lucide="zap" class="w-4 h-4"></i> 一键下载 & 构建
+                    <i data-lucide="zap" class="w-4 h-4"></i> One-Click Download & Build
                 </button>
             </div>
 
             <div id="install-status-box" class="hidden mt-4 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-blue-300 font-mono flex items-start gap-2 transition-all">
                 <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-blue-400 shrink-0 mt-0.5"></i>
-                <div class="break-all">等待操作...</div>
+                <div class="break-all">Waiting for action...</div>
             </div>
         </section>
 
-        <!-- 自动备份间隔全局设置卡片 -->
+        <!-- Global Automatic Backup Interval Settings Card -->
         <section class="glass-card rounded-2xl p-6 mb-6 shadow-xl">
             <h2 class="text-base font-semibold text-white mb-3 flex items-center gap-2">
-                <i data-lucide="clock" class="w-5 h-5 text-indigo-400"></i> 定时自动备份设置
+                <i data-lucide="clock" class="w-5 h-5 text-indigo-400"></i> Scheduled Auto-Backup Settings
             </h2>
 
             <div class="flex flex-wrap items-center gap-3">
-                <span class="text-xs text-slate-400">自动备份检测间隔：</span>
+                <span class="text-xs text-slate-400">Auto-backup check interval:</span>
                 <div class="relative flex items-center">
                     <input type="number" id="backup-interval-input" min="1" max="1440" class="w-24 bg-slate-800/80 border border-slate-700/80 rounded-xl px-3 py-1.5 text-center font-semibold text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all">
-                    <span class="ml-2 text-xs text-slate-400">分钟</span>
+                    <span class="ml-2 text-xs text-slate-400">minutes</span>
                 </div>
                 <button onclick="updateBackupInterval()" class="ml-auto sm:ml-0 bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700 text-slate-200 text-xs font-medium px-4 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5">
-                    <i data-lucide="save" class="w-3.5 h-3.5"></i> 保存间隔
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Save Interval
                 </button>
             </div>
         </section>
 
-        <!-- 服务器列表卡片 -->
+        <!-- Server List Card -->
         <section class="glass-card rounded-2xl p-6 shadow-xl">
             <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-800">
                 <h2 class="text-base font-semibold text-white flex items-center gap-2">
-                    <i data-lucide="layers" class="w-5 h-5 text-purple-400"></i> 我的服务器实例
+                    <i data-lucide="layers" class="w-5 h-5 text-purple-400"></i> My Server Instances
                 </h2>
                 <button onclick="fetchServers()" class="text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 active:scale-95 px-3 py-1.5 rounded-lg border border-slate-700 transition-all flex items-center gap-1">
-                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> 刷新
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh
                 </button>
             </div>
 
             <div id="servers-list" class="space-y-4">
                 <div class="text-slate-500 text-center py-8 text-sm flex flex-col items-center gap-2">
                     <i data-lucide="loader" class="w-6 h-6 animate-spin text-slate-600"></i>
-                    <span>加载服务器数据中...</span>
+                    <span>Loading server data...</span>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- 控制台与性能监控 模态框 -->
+    <!-- Console & Performance Monitoring Modal -->
     <div id="console-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="glass-card w-full max-w-3xl rounded-2xl p-6 border border-slate-700 shadow-2xl flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center pb-4 mb-3 border-b border-slate-800">
                 <div>
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="terminal" class="w-5 h-5 text-blue-400"></i> 控制台: <span id="console-server-name" class="text-blue-400"></span>
+                        <i data-lucide="terminal" class="w-5 h-5 text-blue-400"></i> Console: <span id="console-server-name" class="text-blue-400"></span>
                     </h3>
                     <div class="flex gap-4 text-xs text-slate-400 mt-1">
                         <span>CPU: <b id="perf-cpu" class="text-emerald-400">0%</b></span>
-                        <span>实测内存: <b id="perf-mem" class="text-blue-400">0 MB</b></span>
-                        <span>在线玩家: <b id="perf-players" class="text-purple-400">0人</b></span>
+                        <span>Memory Used: <b id="perf-mem" class="text-blue-400">0 MB</b></span>
+                        <span>Players Online: <b id="perf-players" class="text-purple-400">0</b></span>
                     </div>
                 </div>
                 <button onclick="closeModal('console-modal')" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
-            <!-- 日志终端界面 -->
+            <!-- Log Terminal Interface -->
             <div id="console-log-box" class="bg-black/90 p-4 rounded-xl font-mono text-xs text-green-400 overflow-y-auto flex-1 space-y-1 my-2 border border-slate-800 h-80 leading-relaxed">
-                <div>正在连接日志...</div>
+                <div>Connecting to logs...</div>
             </div>
 
             <div class="flex gap-2 mt-2">
-                <input type="text" id="console-cmd-input" placeholder="输入指令 (如: op <player> / say <msg> / stop)..."
+                <input type="text" id="console-cmd-input" placeholder="Enter command (e.g., op <player> / say <msg> / stop)..."
                        onkeydown="if(event.key==='Enter') sendConsoleCommand()"
                        class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="sendConsoleCommand()" class="bg-blue-600 hover:bg-blue-500 text-white text-sm px-5 py-2 rounded-xl transition-all">发送</button>
+                <button onclick="sendConsoleCommand()" class="bg-blue-600 hover:bg-blue-500 text-white text-sm px-5 py-2 rounded-xl transition-all">Send</button>
             </div>
         </div>
     </div>
 
-    <!-- Mod 管理器 模态框 -->
+    <!-- Mod Manager Modal -->
     <div id="mod-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="glass-card w-full max-w-2xl rounded-2xl p-6 border border-slate-700 shadow-2xl flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center pb-3 border-b border-slate-800">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="puzzle" class="w-5 h-5 text-purple-400"></i> Mod 管理器 (<span id="mod-server-name" class="text-purple-300"></span>)
+                    <i data-lucide="puzzle" class="w-5 h-5 text-purple-400"></i> Mod Manager (<span id="mod-server-name" class="text-purple-300"></span>)
                 </h3>
                 <button onclick="closeModal('mod-modal')" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
-            <!-- 拖拽上传区 -->
+            <!-- Drag and Drop Upload Area -->
             <div id="drop-zone" class="my-4 border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-4 text-center cursor-pointer transition-all bg-slate-900/40"
                  onclick="document.getElementById('mod-file-input').click()">
                 <i data-lucide="upload-cloud" class="w-8 h-8 text-purple-400 mx-auto mb-1"></i>
-                <p class="text-xs text-slate-300">点击或拖拽 <code class="text-purple-400 font-mono">.jar</code> 模组文件至此处上传</p>
+                <p class="text-xs text-slate-300">Click or drag <code class="text-purple-400 font-mono">.jar</code> mod file here to upload</p>
                 <input type="file" id="mod-file-input" accept=".jar,.disabled" class="hidden" onchange="uploadModFile(this.files[0])">
             </div>
 
             <div id="mod-list-box" class="flex-1 overflow-y-auto space-y-2 pr-1 h-64">
-                <!-- Mod 列表 -->
+                <!-- Mod List -->
             </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
                     selectEl.appendChild(opt);
                 });
             } catch (err) {
-                selectEl.innerHTML = '<option value="">加载版本失败！</option>';
+                selectEl.innerHTML = '<option value="">Failed to load versions!</option>';
             }
         }
 
@@ -229,8 +229,8 @@
                 container.innerHTML = `
                     <div class="text-center py-10 bg-slate-900/40 rounded-xl border border-dashed border-slate-800">
                         <i data-lucide="box" class="w-10 h-10 text-slate-600 mx-auto mb-2"></i>
-                        <p class="text-sm text-slate-400">还没有创建任何服务器实例</p>
-                        <p class="text-xs text-slate-600 mt-1">请在上方选择 MC 版本并点击构建</p>
+                        <p class="text-sm text-slate-400">No server instances created yet</p>
+                        <p class="text-xs text-slate-600 mt-1">Please select an MC version above and click build</p>
                     </div>`;
                 renderIcons();
                 return;
@@ -241,18 +241,18 @@
 
                 const statusBadge = isRunning
                     ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs rounded-full font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 运行中
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Running
                        </span>`
                     : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-slate-800 text-slate-400 border border-slate-700 text-xs rounded-full font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> 已停止
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Stopped
                        </span>`;
 
                 const btnHTML = isRunning
                     ? `<button onclick="stopServer('${server.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1">
-                        <i data-lucide="square" class="w-3.5 h-3.5"></i> 停止
+                        <i data-lucide="square" class="w-3.5 h-3.5"></i> Stop
                        </button>`
                     : `<button onclick="startServer('${server.name}')" class="bg-emerald-600 hover:bg-emerald-500 text-white active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all shadow-md shadow-emerald-600/20 flex items-center gap-1">
-                        <i data-lucide="play" class="w-3.5 h-3.5"></i> 启动
+                        <i data-lucide="play" class="w-3.5 h-3.5"></i> Start
                        </button>`;
 
                 const autoBackupBtnClass = server.auto_backup
@@ -270,18 +270,18 @@
                             <div class="flex items-center flex-wrap gap-2">
                                 ${btnHTML}
                                 <button onclick="openConsole('${server.name}')" class="bg-slate-800 hover:bg-blue-600/20 text-slate-300 hover:text-blue-400 border border-slate-700 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1">
-                                    <i data-lucide="terminal" class="w-3.5 h-3.5"></i> 控制台
+                                    <i data-lucide="terminal" class="w-3.5 h-3.5"></i> Console
                                 </button>
                                 <button onclick="openModManager('${server.name}')" class="bg-slate-800 hover:bg-purple-600/20 text-slate-300 hover:text-purple-400 border border-slate-700 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1">
-                                    <i data-lucide="puzzle" class="w-3.5 h-3.5"></i> Mod 管理
+                                    <i data-lucide="puzzle" class="w-3.5 h-3.5"></i> Mods
                                 </button>
                                 <button onclick="toggleAutoBackup('${server.name}', ${!server.auto_backup})" class="${autoBackupBtnClass} border active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5">
-                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 自动备份: ${server.auto_backup ? '开启' : '关闭'}
+                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Auto Backup: ${server.auto_backup ? 'On' : 'Off'}
                                 </button>
                                 <button onclick="backupServer('${server.name}')" class="bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 text-purple-300 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1">
-                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i> 备份
+                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i> Backup
                                 </button>
-                                <button onclick="deleteServer('${server.name}')" class="bg-slate-800 hover:bg-rose-600/20 text-slate-400 hover:text-rose-400 border border-slate-700 hover:border-rose-500/30 active:scale-95 p-1.5 rounded-xl transition-all" title="删除服务器">
+                                <button onclick="deleteServer('${server.name}')" class="bg-slate-800 hover:bg-rose-600/20 text-slate-400 hover:text-rose-400 border border-slate-700 hover:border-rose-500/30 active:scale-95 p-1.5 rounded-xl transition-all" title="Delete Server">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -289,18 +289,18 @@
 
                         <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-center gap-4 text-xs">
                             <span class="font-medium text-slate-400 whitespace-nowrap flex items-center gap-1.5">
-                                <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-400"></i> 分配内存上限:
+                                <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-400"></i> Max Allocated Memory:
                             </span>
                             <input type="range" min="1" max="16" value="${server.memory}"
                                    id="memory-range-${server.name}"
                                    class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
                                    oninput="document.getElementById('memory-val-${server.name}').innerText = this.value + ' GB'"
-                                   ${isRunning ? 'disabled title="运行中的服务器无法更改内存"' : ''}>
+                                   ${isRunning ? 'disabled title="Cannot change memory while server is running"' : ''}>
                             <span id="memory-val-${server.name}" class="font-bold text-blue-400 w-12 text-center bg-blue-500/10 py-1 rounded border border-blue-500/20">${server.memory} GB</span>
                             <button onclick="saveMemory('${server.name}')"
                                     class="bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all active:scale-95"
                                     ${isRunning ? 'disabled' : ''}>
-                                保存
+                                Save
                             </button>
                         </div>
                     </div>
@@ -315,7 +315,7 @@
             if(consoleTimer) clearInterval(consoleTimer);
         }
 
-        // --- 控制台与性能监控逻辑 ---
+        // --- Console & Performance Monitoring Logic ---
         let currentConsoleServer = null;
         let consoleTimer = null;
 
@@ -342,7 +342,7 @@
             const perfData = await perfRes.json();
             document.getElementById('perf-cpu').innerText = `${perfData.cpu}%`;
             document.getElementById('perf-mem').innerText = `${perfData.memory_mb} MB`;
-            document.getElementById('perf-players').innerText = `${perfData.players_online}人 (${perfData.players.join(', ') || '无'})`;
+            document.getElementById('perf-players').innerText = `${perfData.players_online} (${perfData.players.join(', ') || 'None'})`;
         }
 
         async function sendConsoleCommand() {
@@ -359,7 +359,7 @@
             setTimeout(updateConsoleData, 200);
         }
 
-        // --- Mod 管理器逻辑 ---
+        // --- Mod Manager Logic ---
         let currentModServer = null;
 
         function openModManager(serverName) {
@@ -375,7 +375,7 @@
             const box = document.getElementById('mod-list-box');
 
             if(data.mods.length === 0) {
-                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">mods 文件夹为空</div>`;
+                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">Mods folder is empty</div>`;
                 return;
             }
 
@@ -387,7 +387,7 @@
                         <span class="text-slate-600 shrink-0">(${mod.size} MB)</span>
                     </div>
                     <button onclick="toggleMod('${mod.name}')" class="px-3 py-1 rounded-lg text-xs font-medium transition-all shrink-0 ${mod.enabled ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20'}">
-                        ${mod.enabled ? '一键禁用' : '启用'}
+                        ${mod.enabled ? 'Disable' : 'Enable'}
                     </button>
                 </div>
             `).join('');
@@ -418,7 +418,7 @@
             fetchModList();
         }
 
-        // 绑定拖拽上传
+        // Bind Drag and Drop Upload
         const dropZone = document.getElementById('drop-zone');
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-purple-500'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-purple-500'));
@@ -428,7 +428,7 @@
             if (e.dataTransfer.files.length) uploadModFile(e.dataTransfer.files[0]);
         });
 
-        // 基础操作回调
+        // Basic Operation Callbacks
         async function updateBackupInterval() {
             const inputVal = document.getElementById('backup-interval-input').value;
             const res = await fetch('/api/set_backup_interval', {
@@ -488,7 +488,7 @@
         }
 
         async function deleteServer(name) {
-            if (!confirm(`【警告】确定彻底删除服务器 [${name}] 吗？`)) return;
+            if (!confirm(`[Warning] Are you sure you want to completely delete server [${name}]?`)) return;
             const res = await fetch('/api/delete', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({name})
@@ -501,7 +501,7 @@
         let statusInterval = null;
         async function installServer() {
             const version = document.getElementById('mc-version-select').value;
-            if(!version) return alert("请先选择一个有效的游戏版本！");
+            if(!version) return alert("Please select a valid game version first!");
 
             const res = await fetch('/api/install', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -522,7 +522,7 @@
                 if(statData.status === 'done' || statData.status === 'error') {
                     clearInterval(statusInterval);
                     fetchServers();
-                    if(statData.status === 'done') alert("Fabric 服务端安装完成！");
+                    if(statData.status === 'done') alert("Fabric server installation complete!");
                 }
             }, 1000);
         }

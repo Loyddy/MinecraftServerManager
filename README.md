@@ -1,6 +1,6 @@
-# Minecraft Fabric Server Manager
+# Minecraft Server Manager
 
-A lightweight Minecraft Fabric server management panel built with Python Flask and Tailwind CSS...
+A lightweight Minecraft server management panel built with Python Flask and Tailwind CSS...
 
 ---
 

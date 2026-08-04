@@ -121,6 +121,7 @@ Root-Directory/
     ├── config.json
     └── index.html
 ```
+<img width="1424" height="427" alt="image" src="https://github.com/user-attachments/assets/606505a6-6db7-420d-ace9-926211c97424" />
 
 > **Note**
 >

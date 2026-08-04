@@ -193,3 +193,20 @@ After deployment, you can manage the server directly from the web dashboard.
 - 🔄 Enable / Disable Mods
 - 💾 Manual Backup
 - ⏰ Automatic Backup
+
+---
+
+# ❤️ Built With
+
+- **Python**
+- **Flask**
+- **Tailwind CSS**
+- **Minecraft Fabric**
+
+---
+
+# 📄 License
+
+This project is intended for learning and personal server management.
+
+Feel free to modify and extend it for your own use.

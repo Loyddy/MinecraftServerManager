@@ -133,7 +133,6 @@ Root-Directory/
 ## Step 2 — Install Dependencies
 
 Enter the `Assistant` directory.
-<img width="1406" height="188" alt="image" src="https://github.com/user-attachments/assets/b2061c27-bfca-4a89-be81-3a932fbecfc9" />
 
 Install the required Python packages in the termial(should be in the same file as main.py).
 <img width="1425" height="883" alt="image" src="https://github.com/user-attachments/assets/6e009074-5a30-4141-85ec-4b3fa21aeceb" />

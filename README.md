@@ -8,26 +8,54 @@ A lightweight Minecraft Fabric server management panel built with Python Flask a
 
 ## ✨ Features
 
-### 🚀 One-Click Deployment
-...
+### 🚀 One-Click Fabric Deployment
+- Automatically fetch the latest official Fabric version list.
+- Download the Fabric Installer with a single click.
+- Generate all required server files automatically.
+- Accept the Minecraft EULA automatically during deployment.
 
 ### 🖥️ Multi-Instance Management
-...
+- Create and manage multiple Fabric server instances independently.
+- Start, stop, or delete any server with one click.
+- Keep different Minecraft versions separated and organized.
 
 ### 💾 Dynamic Memory Configuration
-...
+- Adjust Java memory allocation (`-Xms` / `-Xmx`) directly from the web interface.
+- Visual memory slider for quick and convenient configuration.
+- No manual editing of startup scripts required.
 
 ### 📜 Real-Time Console
-...
+- Stream server logs in real time.
+- Send console commands instantly, including:
+  - `say`
+  - `op`
+  - `stop`
+  - `whitelist`
+  - and any other Minecraft server command.
 
 ### 📊 Performance Monitoring
-...
+Monitor server status in real time, including:
+
+- CPU usage
+- Memory usage (MB)
+- Online player count
+- Online player list
 
 ### 🧩 Mod Manager
-...
+Manage Fabric Mods directly from the browser.
+
+- Drag & drop `.jar` files to upload
+- Click-to-upload support
+- One-click enable/disable Mods
+- Disabled Mods are automatically renamed with the `.disabled` extension
 
 ### 💾 Backup System
-...
+Protect your worlds with automatic and manual backups.
+
+- One-click manual world backup
+- Automatic scheduled backups running in the background
+- Configurable global backup interval
+- Automatic cleanup keeps only the two most recent backups for each server instance to save disk space
 
 ---
 

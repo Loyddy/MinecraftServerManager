@@ -160,12 +160,14 @@ After a few seconds, your default browser will automatically open:
 ```text
 http://localhost:5000
 ```
+<img width="1797" height="1511" alt="image" src="https://github.com/user-attachments/assets/77265c05-2783-4bf5-984a-44bcc03c9b2b" />
+
 
 ---
 
 ## Step 4 — Deploy a Fabric Server
 
-1. Open **Deploy Fabric Server**
+1. Look at **Deploy Fabric Server**
 2. Select the Minecraft version.
 3. Click **One-Click Download & Build**.
 4. Wait for deployment to finish.

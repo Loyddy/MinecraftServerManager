@@ -172,8 +172,8 @@
             <div id="drop-zone" class="my-4 border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-4 text-center cursor-pointer transition-all bg-slate-900/40"
                  onclick="document.getElementById('mod-file-input').click()">
                 <i data-lucide="upload-cloud" class="w-8 h-8 text-purple-400 mx-auto mb-1"></i>
-                <p class="text-xs text-slate-300">Click or drag <code class="text-purple-400 font-mono">.jar</code> mod file here to upload</p>
-                <input type="file" id="mod-file-input" accept=".jar,.disabled" class="hidden" onchange="uploadModFile(this.files[0])">
+                <p class="text-xs text-slate-300">点击或将多个 <code class="text-purple-400 font-mono">.jar</code> 模组文件拖入此处上传</p>
+                <input type="file" id="mod-file-input" accept=".jar,.disabled" class="hidden" multiple onchange="uploadModFiles(this.files)">
             </div>
 
             <div id="mod-list-box" class="flex-1 overflow-y-auto space-y-2 pr-1 h-64">
@@ -418,9 +418,14 @@
                         <span class="${mod.enabled ? 'text-slate-200 font-medium' : 'text-slate-500 line-through'} truncate">${mod.name}</span>
                         <span class="text-slate-600 shrink-0">(${mod.size} MB)</span>
                     </div>
-                    <button onclick="toggleMod('${mod.name}')" class="px-3 py-1 rounded-lg text-xs font-medium transition-all shrink-0 ${mod.enabled ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20'}">
-                        ${mod.enabled ? 'Disable' : 'Enable'}
-                    </button>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="toggleMod('${mod.name}')" class="px-3 py-1 rounded-lg text-xs font-medium transition-all ${mod.enabled ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20'}">
+                            ${mod.enabled ? 'Disable' : 'Enable'}
+                        </button>
+                        <button onclick="deleteMod('${mod.name}')" class="p-1 text-slate-400 hover:text-rose-400 bg-slate-800 hover:bg-rose-500/20 rounded-lg border border-slate-700 transition-all" title="Delete Mod">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
             renderIcons();
@@ -435,18 +440,40 @@
             fetchModList();
         }
 
-        async function uploadModFile(file) {
-            if(!file) return;
-            const formData = new FormData();
-            formData.append('name', currentModServer);
-            formData.append('file', file);
+        async function uploadModFiles(files) {
+            if(!files || files.length === 0) return;
 
-            const res = await fetch('/api/mods/upload', {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const formData = new FormData();
+                formData.append('name', currentModServer);
+                formData.append('file', file);
+
+                try {
+                    await fetch('/api/mods/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                } catch (err) {
+                    console.error(`Failed to upload ${file.name}:`, err);
+                }
+            }
+
+            fetchModList();
+        }
+
+        async function deleteMod(filename) {
+            if (!confirm(`确定要删除模组 [${filename}] 吗？`)) return;
+
+            const res = await fetch('/api/mods/delete', {
                 method: 'POST',
-                body: formData
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: currentModServer, filename})
             });
             const data = await res.json();
-            alert(data.message || data.error);
+            if(data.error) {
+                alert(data.error);
+            }
             fetchModList();
         }
 
@@ -456,7 +483,9 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('border-purple-500');
-            if (e.dataTransfer.files.length) uploadModFile(e.dataTransfer.files[0]);
+            if (e.dataTransfer.files.length) {
+                uploadModFiles(e.dataTransfer.files);
+            }
         });
 
         // Basic Operation Callbacks

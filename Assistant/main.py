@@ -517,6 +517,28 @@ def upload_mod():
     return jsonify({"message": f"Mod [{filename}] 上传成功！"})
 
 
+@app.route('/api/mods/delete', methods=['POST'])
+def delete_mod():
+    data = request.json
+    server_name = data.get('name')
+    filename = data.get('filename')
+
+    if not server_name or not filename:
+        return jsonify({"error": "参数不完整"}), 400
+
+    mods_dir = os.path.join(VERSIONS_DIR, server_name, 'mods')
+    filepath = os.path.join(mods_dir, filename)
+
+    if not os.path.exists(filepath):
+        return jsonify({"error": "找不到指定的 Mod 文件"}), 404
+
+    try:
+        os.remove(filepath)
+        return jsonify({"message": f"Mod [{filename}] 已成功删除！"})
+    except Exception as e:
+        return jsonify({"error": f"删除 Mod 失败: {str(e)}"}), 500
+
+
 @app.route('/api/performance', methods=['GET'])
 def get_performance():
     server_name = request.args.get('name')

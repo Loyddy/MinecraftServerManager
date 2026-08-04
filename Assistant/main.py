@@ -116,6 +116,50 @@ def get_server_memory(server_name):
     return 2
 
 
+def get_server_properties_value(server_name, key, default):
+    """从 server.properties 读取指定配置项的值"""
+    prop_path = os.path.join(VERSIONS_DIR, server_name, 'server.properties')
+    if not os.path.exists(prop_path):
+        return default
+    try:
+        with open(prop_path, 'r', encoding='utf-8', errors='ignore') as f:
+            for line in f:
+                if line.strip().startswith(f"{key}="):
+                    val = line.strip().split('=')[1]
+                    return int(val)
+    except Exception:
+        pass
+    return default
+
+
+def set_server_properties_value(server_name, key, value):
+    """修改 server.properties 中的指定配置项"""
+    prop_path = os.path.join(VERSIONS_DIR, server_name, 'server.properties')
+    if not os.path.exists(prop_path):
+        return False
+    try:
+        with open(prop_path, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+
+        found = False
+        new_lines = []
+        for line in lines:
+            if line.strip().startswith(f"{key}="):
+                new_lines.append(f"{key}={value}\n")
+                found = True
+            else:
+                new_lines.append(line)
+
+        if not found:
+            new_lines.append(f"{key}={value}\n")
+
+        with open(prop_path, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+        return True
+    except Exception:
+        return False
+
+
 def read_process_output(server_name, process):
     """线程：读取子进程标准输出存入内存，供前端控制台实时拉取"""
     server_logs[server_name] = []
@@ -229,11 +273,15 @@ def list_servers():
                 is_running = s in running_servers and running_servers[s].poll() is None
                 is_auto_backup = auto_backup_config.get(s, True)
                 memory_gb = get_server_memory(s)
+                view_distance = get_server_properties_value(s, 'view-distance', 10)
+                sim_distance = get_server_properties_value(s, 'simulation-distance', 10)
                 servers.append({
                     "name": s,
                     "running": is_running,
                     "auto_backup": is_auto_backup,
-                    "memory": memory_gb
+                    "memory": memory_gb,
+                    "view_distance": view_distance,
+                    "simulation_distance": sim_distance
                 })
     return jsonify({
         "servers": servers,
@@ -251,7 +299,6 @@ def set_backup_interval():
         if minutes < 1:
             return jsonify({"error": "时间间隔不能小于 1 分钟！"}), 400
         auto_backup_interval = minutes * 60
-        # 保存持久化到文件
         save_config(auto_backup_interval)
         return jsonify({"message": f"自动备份间隔已调整为 {minutes} 分钟并已保存到配置文件！"})
     except ValueError:
@@ -284,6 +331,38 @@ def set_memory():
         return jsonify({"message": f"服务器 [{server_name}] 分配内存已更新为 {memory} GB！"})
     except Exception as e:
         return jsonify({"error": f"修改内存配置失败: {str(e)}"}), 500
+
+
+@app.route('/api/set_distances', methods=['POST'])
+def set_distances():
+    data = request.json
+    server_name = data.get('name')
+    view_distance = data.get('view_distance')
+    sim_distance = data.get('simulation_distance')
+
+    if not server_name:
+        return jsonify({"error": "未提供服务器名称"}), 400
+
+    prop_path = os.path.join(VERSIONS_DIR, server_name, 'server.properties')
+    if not os.path.exists(prop_path):
+        return jsonify({"error": "找不到 server.properties 文件（请确保服务器至少完整运行并生成过配置文件）"}), 404
+
+    try:
+        if view_distance is not None:
+            vd = int(view_distance)
+            if not (8 <= vd <= 32):
+                return jsonify({"error": "视距必须在 8 到 32 之间"}), 400
+            set_server_properties_value(server_name, 'view-distance', vd)
+
+        if sim_distance is not None:
+            sd = int(sim_distance)
+            if not (4 <= sd <= 16):
+                return jsonify({"error": "模拟距离必须在 4 到 16 之间"}), 400
+            set_server_properties_value(server_name, 'simulation-distance', sd)
+
+        return jsonify({"message": f"服务器 [{server_name}] 的视距和模拟距离配置已更新！"})
+    except Exception as e:
+        return jsonify({"error": f"更新距离配置失败: {str(e)}"}), 500
 
 
 @app.route('/api/toggle_auto_backup', methods=['POST'])
@@ -344,7 +423,6 @@ def stop_server():
     return jsonify({"error": "服务器未在运行状态"}), 404
 
 
-# --- 1. 控制台与日志查阅 ---
 @app.route('/api/console/logs', methods=['GET'])
 def get_console_logs():
     server_name = request.args.get('name')
@@ -380,7 +458,6 @@ def send_command():
     return jsonify({"error": "服务器未运行！"}), 400
 
 
-# --- 2. Mod 管理器 ---
 @app.route('/api/mods/list', methods=['GET'])
 def list_mods():
     server_name = request.args.get('name')
@@ -440,7 +517,6 @@ def upload_mod():
     return jsonify({"message": f"Mod [{filename}] 上传成功！"})
 
 
-# --- 3. 性能监控 ---
 @app.route('/api/performance', methods=['GET'])
 def get_performance():
     server_name = request.args.get('name')

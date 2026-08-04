@@ -287,6 +287,7 @@
                             </div>
                         </div>
 
+                        <!-- 内存配置栏 -->
                         <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-center gap-4 text-xs">
                             <span class="font-medium text-slate-400 whitespace-nowrap flex items-center gap-1.5">
                                 <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-400"></i> Max Allocated Memory:
@@ -302,6 +303,37 @@
                                     ${isRunning ? 'disabled' : ''}>
                                 Save
                             </button>
+                        </div>
+
+                        <!-- 视距与模拟距离配置栏 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <!-- 视距 (View Distance: 8-32) -->
+                            <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-center gap-3 text-xs">
+                                <span class="font-medium text-slate-400 whitespace-nowrap flex items-center gap-1.5">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5 text-indigo-400"></i> View Distance:
+                                </span>
+                                <input type="range" min="8" max="32" value="${server.view_distance}"
+                                       id="view-range-${server.name}"
+                                       class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                       oninput="document.getElementById('view-val-${server.name}').innerText = this.value">
+                                <span id="view-val-${server.name}" class="font-bold text-indigo-400 w-8 text-center bg-indigo-500/10 py-1 rounded border border-indigo-500/20">${server.view_distance}</span>
+                            </div>
+
+                            <!-- 模拟距离 (Simulation Distance: 4-16) -->
+                            <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-center gap-3 text-xs">
+                                <span class="font-medium text-slate-400 whitespace-nowrap flex items-center gap-1.5">
+                                    <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i> Sim Distance:
+                                </span>
+                                <input type="range" min="4" max="16" value="${server.simulation_distance}"
+                                       id="sim-range-${server.name}"
+                                       class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                                       oninput="document.getElementById('sim-val-${server.name}').innerText = this.value">
+                                <span id="sim-val-${server.name}" class="font-bold text-emerald-400 w-8 text-center bg-emerald-500/10 py-1 rounded border border-emerald-500/20">${server.simulation_distance}</span>
+                                <button onclick="saveDistances('${server.name}')"
+                                        class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all active:scale-95 ml-auto">
+                                    Save
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -418,7 +450,6 @@
             fetchModList();
         }
 
-        // Bind Drag and Drop Upload
         const dropZone = document.getElementById('drop-zone');
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-purple-500'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-purple-500'));
@@ -444,6 +475,22 @@
             const res = await fetch('/api/set_memory', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({name: serverName, memory: memoryVal})
+            });
+            const data = await res.json();
+            alert(data.message || data.error);
+            fetchServers();
+        }
+
+        async function saveDistances(serverName) {
+            const viewVal = document.getElementById(`view-range-${serverName}`).value;
+            const simVal = document.getElementById(`sim-range-${serverName}`).value;
+            const res = await fetch('/api/set_distances', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name: serverName,
+                    view_distance: viewVal,
+                    simulation_distance: simVal
+                })
             });
             const data = await res.json();
             alert(data.message || data.error);

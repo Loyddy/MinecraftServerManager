@@ -132,13 +132,16 @@ Root-Directory/
 
 ## Step 2 — Install Dependencies
 
-Rnter the `Assistant` directory.
+Enter the `Assistant` directory.
+<img width="1406" height="188" alt="image" src="https://github.com/user-attachments/assets/b2061c27-bfca-4a89-be81-3a932fbecfc9" />
 
-Install the required Python packages.
+Install the required Python packages in the termial(should be in the same file as main.py).
+<img width="1425" height="883" alt="image" src="https://github.com/user-attachments/assets/6e009074-5a30-4141-85ec-4b3fa21aeceb" />
 
 ```bash
-pip install -r requirements.txt
+pip install Flask==2.3.3 requests==2.31.0 psutil==5.9.5 Werkzeug==2.3.7
 ```
+<img width="2030" height="430" alt="image" src="https://github.com/user-attachments/assets/a2e1359c-0971-4a0b-acb9-70c543f0920c" />
 
 ---
 

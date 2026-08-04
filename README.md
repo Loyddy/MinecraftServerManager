@@ -121,7 +121,8 @@ Root-Directory/
     ├── config.json
     └── index.html
 ```
-<img width="1424" height="427" alt="image" src="https://github.com/user-attachments/assets/606505a6-6db7-420d-ace9-926211c97424" />
+<img width="1403" height="379" alt="image" src="https://github.com/user-attachments/assets/761fdcf1-d589-4c89-accb-5e5815e5346d" />
+
 
 > **Note**
 >
@@ -131,11 +132,7 @@ Root-Directory/
 
 ## Step 2 — Install Dependencies
 
-Open a terminal inside the `Assistant` directory.
-
-```bash
-cd Assistant
-```
+Rnter the `Assistant` directory.
 
 Install the required Python packages.
 

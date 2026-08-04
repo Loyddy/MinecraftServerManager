@@ -160,6 +160,7 @@ After a few seconds, your default browser will automatically open:
 ```text
 http://localhost:5000
 ```
+The page should be look like this👇👇👇
 <img width="1797" height="1511" alt="image" src="https://github.com/user-attachments/assets/77265c05-2783-4bf5-984a-44bcc03c9b2b" />
 
 
